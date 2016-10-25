@@ -87,10 +87,10 @@ public:
    void activer();
 
    /// Permet de lancer une valeur uniform (int) immédiatement
-   void CNuanceurProg::uniform1(char* nom, int v);
+   void uniform1(char* nom, int v);
 
    /// Permet de lancer une valeur uniform (float) immédiatement
-   void CNuanceurProg::uniform1(char* nom, float v);
+   void uniform1(char* nom, float v);
 
    /// Enregistre au sein du programme un uniform float qui sera inscrit à l'activation du nuanceur
    void enregistrerUniformFloat(const char* nom, const float& val);

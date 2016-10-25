@@ -3,7 +3,7 @@ obj := $(src:.cpp=.o)
 exe := main
 
 LDFLAGS := -lGL -lGLEW -lglfw
-CXXFLAGS := -Iglm/glm -fpermissive -fvisibility-ms-compat
+CXXFLAGS := -Iglm/glm
 
 all: $(exe)
 
