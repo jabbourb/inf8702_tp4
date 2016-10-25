@@ -1150,8 +1150,10 @@ void redimensionnement(GLFWwindow* fenetre, int w, int h)
     CVar::currentW = w;
     CVar::currentH = h;
     glViewport(0, 0, w, h);
-	fbo->Liberer();
-	fbo->Init(w, h);
+	if (fbo) {
+		fbo->Liberer();
+		fbo->Init(w, h);
+	}
     dessinerScene();
 }
 
