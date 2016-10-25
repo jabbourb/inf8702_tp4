@@ -12,5 +12,5 @@ void main (void)
    // Passer les bonnes coordonées de textures.
    // Attention les sommets sont dans le domaine [-1, 1]
    // et des coordonées de textures devrait être en [0, 1]
-   // fragTexCoord = ...
+   fragTexCoord = vec2(vp.x/2 + 0.5, vp.y / 2 + 0.5);
 }

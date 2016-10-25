@@ -330,6 +330,8 @@ void initialisation (void) {
 	// TODO :
 	// Création du frame buffer object pour pré-rendu de la scène:
 	// Quelle taille devrait avoir nos textures?
+	fbo =  new CFBO();
+	fbo->Init(CVar::currentW,CVar::currentH);
 
 	// TODO 
 	// Création des trois FBOs pour cartes d'ombres:
@@ -871,19 +873,22 @@ void dessinerScene()
 
 	// TODO Décommenter les conditions:
 
-	//if (CVar::FBOon) {
+	if (CVar::FBOon) {
 		// TODO : 
 		// Activer le FBO pour l'affichage
-	//}
-	//else {
+		fbo->CommencerCapture();
+	}
+	else {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glViewport(0, 0, CVar::currentW, CVar::currentH);
-	//}
+	}
 	
 	//////////////////     Afficher les objets:  ///////////////////////////
 	glDisable(GL_DEPTH_TEST);
+	GLenum err = glGetError();
 	dessinerSkybox();
+	err = glGetError();
 	glEnable(GL_DEPTH_TEST);
 	
 	dessinerGazon();
@@ -899,11 +904,12 @@ void dessinerScene()
 	}
 
 	// TODO Décommenter les conditions:
-	//if (CVar::FBOon){
+	if (CVar::FBOon){
 		//TODO :
 		//Si on utilisait le FBO, le désactiver et dessiner le quad d'écran:
-
-	//}
+		fbo->TerminerCapture();
+		dessinerQuad();
+	}
 	
 
 	// Fonction d'aide pour mieux visualiser le contenu des shadowMaps
