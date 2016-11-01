@@ -331,6 +331,9 @@ void initialisation (void) {
 	// Création du frame buffer object pour pré-rendu de la scène:
 	// Quelle taille devrait avoir nos textures?
 
+	fbo = new CFBO;
+	fbo->Init(CVar::currentW, CVar::currentH);
+
 	// TODO 
 	// Création des trois FBOs pour cartes d'ombres:
     // Utilisez CCst::tailleShadowMap
