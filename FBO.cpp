@@ -88,18 +88,21 @@ void CFBO::Init( int w, int h )
    // on veut des filtres de mignification et magnification de tpe NEAREST!
    glGenTextures(1, &m_Texture);
    glBindTexture(GL_TEXTURE_2D, m_Texture);
-   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_TextureW, m_TextureH, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_TextureW, m_TextureH, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
    // Créer une texture de profondeurs pour les couleurs avec L'ID m_Profondeur: 
-   glGenRenderbuffers(1, &m_Profondeur);
-   glBindRenderbuffer(GL_RENDERBUFFER, m_Profondeur);
-   glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, m_TextureW, m_TextureH);
+   glGenTextures(1, &m_Profondeur);
+   glBindTexture(GL_TEXTURE_2D, m_Profondeur);
+   glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, m_TextureW, m_TextureH, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+   // Nécessaire pour éviter le clamp en interpolation de float -> 0
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
    // Attacher nos deux textures au frame buffer à des fin d'affichage (DRAW):
    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, m_Texture, 0);
-   glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_Profondeur);
+   glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, m_Profondeur, 0);
 
    // Vérification des erreurs FBO
    // Nous vous fournissons cette vérification d'erreurs

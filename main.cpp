@@ -835,7 +835,6 @@ void dessinerQuad(void)
 	// Bind our texture in Texture Unit 1
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, fbo->GetDepthTex());
-
 	
 	glBindVertexArray(quad_vao);
 	glEnableVertexAttribArray(0);
@@ -871,8 +870,6 @@ void dessinerScene()
 	
 	// Peupler nos textures de profondeur selon la géométrie courante de la scène:
 	construireCartesOmbrage();
-
-	// TODO Décommenter les conditions:
 
 	if (CVar::FBOon) {
 		fbo->CommencerCapture();
