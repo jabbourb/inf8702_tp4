@@ -61,7 +61,7 @@ CFBO *fbo = NULL;
 CFBO *shadowMaps[3];
 CTextureCubemap *carteDiffuse;
 
-bool afficherShadowMap = false;
+bool afficherShadowMap = true;
 bool afficherAutresModeles = false;
 unsigned int shadowMapAAfficher = 0;
 
@@ -381,8 +381,21 @@ void construireCartesOmbrage(void)
 	// avec la bonne matrice modèle!
 	for (unsigned int i = 0; i < CVar::lumieres.size(); i++)
 	{
-		// TODO :
-		// ...
+		shadowMaps[i]->CommencerCapture();
+		// Ne pas calculer la texture de couleurs
+		glDrawBuffer(GL_NONE);
+
+		progNuanceurShadowMap.activer();
+
+		// Passer la matrice MVP au nuanceur
+		lightMVP = lightVP[i] * venusModelMatrix;
+		handle = glGetUniformLocation(progNuanceurShadowMap.getProg(), "shadowMVP");
+		glUniformMatrix4fv(handle, 1, GL_FALSE, &lightMVP[0][0]);
+
+		// Dessiner le modele
+		modele3Dvenus->dessiner();
+
+		shadowMaps[i]->TerminerCapture();
 	}
 }
 
