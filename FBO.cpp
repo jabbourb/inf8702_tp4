@@ -86,7 +86,6 @@ void CFBO::Init( int w, int h )
    // Créer une texture RGB pour les couleurs avec L'ID m_Texture:
    // Pour échantillionner plus tard des valeurs exactes
    // on veut des filtres de mignification et magnification de tpe NEAREST!
-   GLuint m_Texture = 0;
    glGenTextures(1, &m_Texture);
    glBindTexture(GL_TEXTURE_2D, m_Texture);
    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_TextureW, m_TextureH, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
@@ -94,11 +93,9 @@ void CFBO::Init( int w, int h )
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
    // Créer une texture de profondeurs pour les couleurs avec L'ID m_Profondeur: 
-   GLuint m_Profondeur = 0;
    glGenRenderbuffers(1, &m_Profondeur);
    glBindRenderbuffer(GL_RENDERBUFFER, m_Profondeur);
    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, m_TextureW, m_TextureH);
-
 
    // Attacher nos deux textures au frame buffer à des fin d'affichage (DRAW):
    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, m_Texture, 0);
@@ -189,10 +186,11 @@ void CFBO::Liberer()
 ///////////////////////////////////////////////////////////////////////////////
 void CFBO::CommencerCapture()
 {
-    // TODO: 
 	// Activer l'utilisation du FBO
 	// Attention à la résolution avec laquelle on veut afficher!
-	// ...
+	glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glViewport(0, 0, m_TextureW, m_TextureH);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -212,7 +210,7 @@ void CFBO::CommencerCapture()
 ///////////////////////////////////////////////////////////////////////////////
 void CFBO::TerminerCapture()
 {
-	// TODO: 
 	// Remettre OpenGL dans l'état par défaut
-	// ...
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glViewport(0, 0, CVar::currentW, CVar::currentH);
 }

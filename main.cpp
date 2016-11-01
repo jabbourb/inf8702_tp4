@@ -874,15 +874,14 @@ void dessinerScene()
 
 	// TODO Décommenter les conditions:
 
-	//if (CVar::FBOon) {
-		// TODO : 
-		// Activer le FBO pour l'affichage
-	//}
-	//else {
+	if (CVar::FBOon) {
+		fbo->CommencerCapture();
+	}
+	else {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glViewport(0, 0, CVar::currentW, CVar::currentH);
-	//}
+	}
 	
 	//////////////////     Afficher les objets:  ///////////////////////////
 	glDisable(GL_DEPTH_TEST);
@@ -901,12 +900,11 @@ void dessinerScene()
 		dessinerModele3D(modele3Dbuddha, buddhaModelMatrix, mat_cuivre_model);
 	}
 
-	// TODO Décommenter les conditions:
-	//if (CVar::FBOon){
-		//TODO :
+	if (CVar::FBOon){
 		//Si on utilisait le FBO, le désactiver et dessiner le quad d'écran:
-
-	//}
+		fbo->TerminerCapture();
+		dessinerQuad();
+	}
 	
 
 	// Fonction d'aide pour mieux visualiser le contenu des shadowMaps
