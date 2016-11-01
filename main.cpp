@@ -327,17 +327,17 @@ void initialisation (void) {
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 
-	// TODO :
 	// Création du frame buffer object pour pré-rendu de la scène:
-	// Quelle taille devrait avoir nos textures?
-
 	fbo = new CFBO;
+	// taille = résolution actuelle
 	fbo->Init(CVar::currentW, CVar::currentH);
 
-	// TODO 
 	// Création des trois FBOs pour cartes d'ombres:
-    // Utilisez CCst::tailleShadowMap
-	
+	for (int i=0; i<3; i++) {
+		shadowMaps[i] = new CFBO;
+		// taille réduite
+		shadowMaps[i]->Init(CCst::tailleShadowMap,CCst::tailleShadowMap);
+	}
 
 	construireMatricesProjectivesEclairage();
 
