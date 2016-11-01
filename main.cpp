@@ -19,6 +19,7 @@
 #include <gtc/matrix_inverse.hpp>
 #include <gtx/transform.hpp>
 #include <gtx/matrix_cross_product.hpp>
+#include <gtc/type_ptr.hpp>
 #include "textfile.h"
 #include "GrilleQuads.h"
 #include "Cst.h"
@@ -416,25 +417,54 @@ void construireMatricesProjectivesEclairage(void)
 	glm::vec3 point_vise;
 	glm::mat4 lumVueMat;
 	glm::mat4 lumProjMat;
+	
+	// TODO: verify that we want w=h for shadow map
+	float aspect_ratio = 1.0f;
+	float clip_near = 0.01f;
+	float clip_far = 1000.0f;
+	glm::vec3 up = glm::vec3(0,1,0);
 
 	/// LUM0 : PONCTUELLE : sauvegarder dans lightVP[0]
 	// position = position lumière
 	// point visé : centre de l'objet (on triche avec la lumière ponctuelle)
 	// fov = Assez pour voir completement le moèdle (~90 est OK).
+	CLumiere* l = CVar::lumieres[ENUM_LUM::LumPonctuelle];
+	l->obtenirPos(pos);
+	point_vise = modele3Dvenus->obtenirCentroid();
+	lumVueMat = glm::lookAt(glm::make_vec3(pos), point_vise, up);
+
+	fov = 90.0f;
+	lumProjMat = glm::perspective(fov, aspect_ratio, clip_near, clip_far);
+
+	lightVP[ENUM_LUM::LumPonctuelle] = lumProjMat * lumVueMat;
 
 
 	/// LUM1 : SPOT : sauvegarder dans lightVP[1]
 	//	position = position lumière
 	//	direction = spot_dir (attention != point visé)
 	//  fov = angle du spot
+	l = CVar::lumieres[ENUM_LUM::LumSpot];
+	l->obtenirPos(pos);
+	l->obtenirSpotDir(dir);
+	lumVueMat = glm::lookAt(glm::make_vec3(pos), glm::make_vec3(pos) + glm::make_vec3(dir), up);
 
+	fov = l->obtenirSpotCutOff();
+	lumProjMat = glm::perspective(fov, aspect_ratio, clip_near, K);
+
+	lightVP[ENUM_LUM::LumSpot] = lumProjMat * lumVueMat;
 
 
 	//LUM2 : DIRECTIONNELLE : sauvegarder dans lightVP[2]
 	//	position = -dir * K | K=constante assez grande pour ne pas être dans le modèle
 	//	direction = 0,0,0
 	//  projection orthogonale, assez large pour voir le modèle (ortho_width)
+	l = CVar::lumieres[ENUM_LUM::LumDirectionnelle];
+	l->obtenirPos(pos);
+	lumVueMat = glm::lookAt(-K*glm::make_vec3(pos), glm::vec3(0.0f), up);
 
+	lumProjMat = glm::ortho(-ortho_width/2.0f, ortho_width/2.0f, -ortho_width/2.0f, ortho_width/2.0f, clip_near, clip_far);
+
+	lightVP[ENUM_LUM::LumDirectionnelle] = lumProjMat * lumVueMat;
 }
 
 
