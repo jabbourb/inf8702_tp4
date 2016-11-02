@@ -116,16 +116,7 @@ void CFBO::Init(int w, int h)
 
 	//On deverouille le buffer de texture
 	glBindTexture(GL_TEXTURE_2D, 0);
-	/*
-	// Generation du buffer pour la profondeur
-	glGenRenderbuffers(1, &m_Profondeur);
-	glBindRenderbuffer(GL_RENDERBUFFER, m_Profondeur);
 
-	// Configuration du Render Buffer
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_STENCIL, w, h);
-	//On deverouille le budder
-	glBindRenderbuffer(GL_RENDERBUFFER, 0);
-	*/
 	// Attacher nos deux textures au frame buffer à des fin d'affichage (DRAW):
 	// Association du Color Buffer
 	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, m_Texture, 0);

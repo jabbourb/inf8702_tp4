@@ -336,7 +336,12 @@ void initialisation (void) {
 	// TODO 
 	// Création des trois FBOs pour cartes d'ombres:
     // Utilisez CCst::tailleShadowMap
-	
+	shadowMaps[0] = new CFBO();
+	shadowMaps[0]->Init(CCst::tailleShadowMap, CCst::tailleShadowMap);
+	shadowMaps[1] = new CFBO();
+	shadowMaps[1]->Init(CCst::tailleShadowMap, CCst::tailleShadowMap);
+	shadowMaps[2] = new CFBO();
+	shadowMaps[2]->Init(CCst::tailleShadowMap, CCst::tailleShadowMap);
 
 	construireMatricesProjectivesEclairage();
 
@@ -416,23 +421,75 @@ void construireMatricesProjectivesEclairage(void)
 	glm::mat4 lumVueMat;
 	glm::mat4 lumProjMat;
 
+	//Parametre pour la perspective
+
+	//On prend un intervalle entre near et far assez grand pour ne pas couper l'ombre
+	float near = 0.1f;
+	float far = 300.0f;
+	//On prend un ratio a 1 car pour notre FBO shadowmap la longeur et largeur de la texture sont identique (512)
+	float aspect = 1.0f;
+
 	/// LUM0 : PONCTUELLE : sauvegarder dans lightVP[0]
 	// position = position lumière
 	// point visé : centre de l'objet (on triche avec la lumière ponctuelle)
 	// fov = Assez pour voir completement le moèdle (~90 est OK).
 
+	//On recupere la position de la lumiere
+	CLumiere *lumPon = CVar::lumieres[ENUM_LUM::LumPonctuelle];
+	(*lumPon).obtenirPos(pos);
+
+	//On recupere la position du centre de la Venus
+	point_vise = modele3Dvenus->obtenirCentroid();
+
+	//Matrice de vue pour la lumiere ponctuelle (du centre de la camera vers le centre du model 3D)
+	lumVueMat = glm::lookAt(glm::vec3(pos[0],pos[1],pos[2]), point_vise, cam_up);
+
+	fov = 90.0f;
+	
+	//Matrice de projection pour la lumière ponctuelle
+	lumProjMat = glm::perspective(fov, aspect, near, far);
+
+	lightVP[0] = lumProjMat * lumVueMat;
 
 	/// LUM1 : SPOT : sauvegarder dans lightVP[1]
 	//	position = position lumière
 	//	direction = spot_dir (attention != point visé)
 	//  fov = angle du spot
 
+	
+	CLumiere *lumSpot = CVar::lumieres[ENUM_LUM::LumSpot];
 
+	//On recupere la position de la lumiere
+	(*lumSpot).obtenirPos(pos);
+	//On recupere la direction de la lumiere
+	(*lumSpot).obtenirSpotDir(dir);
+	//On recupere l'angle du spot
+	fov = (*lumSpot).obtenirSpotCutOff();
+
+	//Construction de la matrice vue
+	lumVueMat = glm::lookAt(glm::vec3(pos[0], pos[1], pos[2]), glm::vec3(pos[0], pos[1], pos[2]) + glm::vec3(dir[0], dir[1], dir[2]), cam_up);
+	//Construction de la matrice projection
+	lumProjMat = glm::perspective(fov, aspect, near, far);
+
+	lightVP[1] = lumProjMat * lumVueMat;
 
 	//LUM2 : DIRECTIONNELLE : sauvegarder dans lightVP[2]
 	//	position = -dir * K | K=constante assez grande pour ne pas être dans le modèle
 	//	direction = 0,0,0
 	//  projection orthogonale, assez large pour voir le modèle (ortho_width)
+	CLumiere *lumDir = CVar::lumieres[ENUM_LUM::LumDirectionnelle];
+
+	//Dans le cas de la lumiere directionnel la direction est stocker dans la position
+	(*lumDir).obtenirPos(pos);
+
+	glm::vec3 positionDir  =  -glm::vec3(pos[0], pos[1], pos[2]) * K;
+	glm::vec3 directionDir = glm::vec3(0, 0, 0);
+
+	//Projection matrix
+	lumProjMat = glm::ortho<float>(-ortho_width, ortho_width, -ortho_width, ortho_width, -ortho_width, 2 * ortho_width);
+	lumVueMat = glm::lookAt(positionDir, directionDir,cam_up);
+
+	lightVP[2] = lumProjMat * lumVueMat;
 
 }
 
