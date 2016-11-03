@@ -222,7 +222,7 @@ void CFBO::CommencerCapture()
 	glBindFramebuffer(GL_FRAMEBUFFER,m_FBO);
 
 	//Set viewport size
-	glViewport(0, 0, CVar::currentW, CVar::currentH);
+	glViewport(0, 0, m_TextureW, m_TextureH);
 	// clear buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

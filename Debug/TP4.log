@@ -4,15 +4,11 @@ c:\users\bureau\source\repos\inf8702_tp4\main.cpp(49): warning C4305: 'argument'
 c:\users\bureau\source\repos\inf8702_tp4\main.cpp(50): warning C4305: 'argument' : troncation de 'double' à 'GLfloat'
 c:\users\bureau\source\repos\inf8702_tp4\main.cpp(51): warning C4305: 'argument' : troncation de 'double' à 'GLfloat'
 c:\users\bureau\source\repos\inf8702_tp4\main.cpp(285): warning C4305: 'argument' : troncation de 'double' à 'GLfloat'
-c:\users\bureau\source\repos\inf8702_tp4\main.cpp(371): warning C4101: 'handle' : variable locale non référencée
-c:\users\bureau\source\repos\inf8702_tp4\main.cpp(414): warning C4101: 'dir' : variable locale non référencée
-c:\users\bureau\source\repos\inf8702_tp4\main.cpp(413): warning C4101: 'pos' : variable locale non référencée
-c:\users\bureau\source\repos\inf8702_tp4\main.cpp(410): warning C4101: 'fov' : variable locale non référencée
-c:\users\bureau\source\repos\inf8702_tp4\main.cpp(459): warning C4305: 'initialisation' : troncation de 'double' à 'float'
-c:\users\bureau\source\repos\inf8702_tp4\main.cpp(509): warning C4305: 'initialisation' : troncation de 'double' à 'float'
-c:\users\bureau\source\repos\inf8702_tp4\main.cpp(513): warning C4305: '=' : troncation de 'double' à 'float'
-c:\users\bureau\source\repos\inf8702_tp4\main.cpp(1183): warning C4018: '<' : incompatibilité signed/unsigned
-c:\users\bureau\source\repos\inf8702_tp4\main.cpp(1272): warning C4244: '+=' : conversion de 'double' en 'float', perte possible de données
-c:\users\bureau\source\repos\inf8702_tp4\main.cpp(1273): warning C4244: '+=' : conversion de 'double' en 'float', perte possible de données
+c:\users\bureau\source\repos\inf8702_tp4\main.cpp(533): warning C4305: 'initialisation' : troncation de 'double' à 'float'
+c:\users\bureau\source\repos\inf8702_tp4\main.cpp(583): warning C4305: 'initialisation' : troncation de 'double' à 'float'
+c:\users\bureau\source\repos\inf8702_tp4\main.cpp(587): warning C4305: '=' : troncation de 'double' à 'float'
+c:\users\bureau\source\repos\inf8702_tp4\main.cpp(1257): warning C4018: '<' : incompatibilité signed/unsigned
+c:\users\bureau\source\repos\inf8702_tp4\main.cpp(1346): warning C4244: '+=' : conversion de 'double' en 'float', perte possible de données
+c:\users\bureau\source\repos\inf8702_tp4\main.cpp(1347): warning C4244: '+=' : conversion de 'double' en 'float', perte possible de données
   TP4.vcxproj -> C:\Users\Bureau\Source\Repos\inf8702_tp4\Debug\TP4.exe
   TP4.vcxproj -> C:\Users\Bureau\Source\Repos\inf8702_tp4\Debug\TP4.pdb (Full PDB)
