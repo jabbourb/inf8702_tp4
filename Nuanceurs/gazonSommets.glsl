@@ -82,7 +82,7 @@ void main (void)
 	// TODO :
 	// Envoyer au nuanceur de fragment les coordonées en espace clip/écran
 	// du point de vue de chaque lumière:
-	// fragLightCoord0 = ...
-	// fragLightCoord1 = ...
-	// fragLightCoord2 = ...
+	fragLightCoord0 = Light0VP * M * vec4(vp,1);
+	fragLightCoord1 = Light1VP * M * vec4(vp,1);
+	fragLightCoord2 = Light2VP * M * vec4(vp,1);
 }

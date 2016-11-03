@@ -437,8 +437,8 @@ void construireMatricesProjectivesEclairage(void)
 	//Parametre pour la perspective
 
 	//On prend un intervalle entre near et far assez grand pour ne pas couper l'ombre
-	float near = 0.1f;
-	float far = 300.0f;
+	float near = 0.01f;
+	float far = 3000.0f;
 	//On prend un ratio a 1 car pour notre FBO shadowmap la longeur et largeur de la texture sont identique (512)
 	float aspect = 1.0f;
 	// up direction vector
