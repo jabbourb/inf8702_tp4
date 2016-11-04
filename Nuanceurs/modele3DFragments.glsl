@@ -1,5 +1,5 @@
 #version 430 core
-
+#extension GL_NV_shadow_samplers_cube : enable
 struct Light
 {
         vec3 Ambient; 
@@ -205,32 +205,33 @@ vec4 lightingIBL()
     // l'intérieur du skybox a été filtrée (léger flou).
 
     // quelques déclarations relatives à l'IBL
-    mat3 normalMatrix_wolrdSpace;    // la matrice de transfo en coord. univ. de la normale
+    mat3 normalMatrix_worldSpace;    // la matrice de transfo en coord. univ. de la normale
     vec3 normal_worldSpace;          // la normale en coord. universelles
     vec3 vertexPos_worldSpace;       // la position du vertex en coord. universelles.
     vec3 eyeDir_worldSpace;          // la direction vertex-caméra en coord. universelles
-    vec3 reflectDir_wordlSpace;      // la direction de réflexion (en coord. univ.) pour le calcul du IBL spéculaire
+    vec3 reflectDir_worldSpace;      // la direction de réflexion (en coord. univ.) pour le calcul du IBL spéculaire
 
     // Afin de calculer la normale en coord. universelles (WORLD COORD.)
     // (à ne pas mélanger avec les coordonnées de visualisation ou eyeCoord ! qu'on 
     // utilise habituellement) il faut trouver la normal Matrix en coord universelles
     // C'est facile, la normalMatrix est toujours uniquement la sous-matrice 3X3
     // de la matrice utilisée pour placer les modèles tant que l'on scale uniformément...
-    // normalMatrix_wolrdSpace = ...
+    normalMatrix_worldSpace = mat3(modelMatrix);
 
     // Calcul de la normale en coordonnées universelles (world coord)
-    // normal_worldSpace = ...
+    normal_worldSpace = normalize(Normal_objectSpace * normalMatrix_worldSpace);
 
     // Lire la contribution diffuse du fragment dans la carte spéculaire.
-    // Diffuse += ...
+    Diffuse += vec4(textureCube(diffMap,normalize(Normal_objectSpace)));
 
     // Pour le calcul spéculaire, on veut échantillonner la texture spéculaire 
 	// là ou la reflexion du vecteur wcEyedir est reflétée.
 
-    // vertexPos_worldSpace = ...
-    // eyeDir_worldSpace = ...
-    // reflectDir_wordlSpace = ...
-    // Specular += ...
+	//Position du point WorldSpace 
+    vertexPos_worldSpace =Position_objectSpace.xyz;
+    eyeDir_worldSpace =  normalize(vertexPos_worldSpace - EyePos_worldSpace );
+    reflectDir_worldSpace = eyeDir_worldSpace - 2* (dot(eyeDir_worldSpace,normal_worldSpace)) * normal_worldSpace;
+    Specular += vec4(textureCube(specMap,normalize(reflectDir_worldSpace)));
 
     // Ajout des contribution lumineuses calculées
     resColor += Diffuse * matDiffuse;
@@ -240,6 +241,9 @@ vec4 lightingIBL()
     return resColor;
 }
 
+float rand(vec2 co){
+  return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
 
 void main () {
     //  Normale du fragment dansle référenciel de caméra

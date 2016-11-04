@@ -71,10 +71,10 @@ float Ombrage(in vec4 fragLightCoord, in sampler2D shadowMap)
     projCoords.xyz = fragLightCoord.xyz / fragLightCoord.w;
 
 	//On sort de la shadow map ici
-	if(abs(projCoords.x) > 1 || abs(projCoords.y) > 1){
+	if(abs(projCoords.x) > 1 || abs(projCoords.y) > 1 || fragLightCoord.w < 0){
 		return shadow;
 	}
-   
+
     // On transforme ces coordonées situées en [-1,1] vers [0,1]:
     projCoords = projCoords/2 + 0.5;
 

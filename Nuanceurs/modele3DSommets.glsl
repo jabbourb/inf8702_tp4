@@ -27,4 +27,8 @@ void main () {
 
 	// TODO:
 	// Passer les variables en coordonnées d'objet pour l'IBL :
+    // Position dans le référenciel de l'objet
+    Position_objectSpace = vp;    
+	// Normale dans le référenciel de l'objet
+	Normal_objectSpace =  vn; 
 }
