@@ -1,4 +1,5 @@
 #version 430 core
+#extension GL_NV_shadow_samplers_cube : enable
 
 struct Light
 {
@@ -183,8 +184,6 @@ vec4 lighting(in vec3 normal, in vec3 eyeDir)
 // fonction d'éclairage pour l'ambiant et le diffus
 vec4 lightingIBL()
 {
-	// TODO: Complétez lightingIBL:
-
     // couleur finale calculée par IBL
     vec4 resColor = vec4(0.0);
 
@@ -216,21 +215,22 @@ vec4 lightingIBL()
     // utilise habituellement) il faut trouver la normal Matrix en coord universelles
     // C'est facile, la normalMatrix est toujours uniquement la sous-matrice 3X3
     // de la matrice utilisée pour placer les modèles tant que l'on scale uniformément...
-    // normalMatrix_wolrdSpace = ...
+    normalMatrix_wolrdSpace = mat3(modelMatrix);
 
     // Calcul de la normale en coordonnées universelles (world coord)
-    // normal_worldSpace = ...
+    normal_worldSpace = normalize(normalMatrix_wolrdSpace * Normal_objectSpace);
 
     // Lire la contribution diffuse du fragment dans la carte spéculaire.
-    // Diffuse += ...
+    Diffuse += textureCube(diffMap,normal_worldSpace);
 
     // Pour le calcul spéculaire, on veut échantillonner la texture spéculaire 
 	// là ou la reflexion du vecteur wcEyedir est reflétée.
 
-    // vertexPos_worldSpace = ...
-    // eyeDir_worldSpace = ...
-    // reflectDir_wordlSpace = ...
-    // Specular += ...
+    vertexPos_worldSpace = (modelMatrix * Position_objectSpace).xyz;
+    eyeDir_worldSpace = EyePos_worldSpace - vertexPos_worldSpace;
+	// Il faut fournir le vecteur camera-vertex à reflect()
+    reflectDir_wordlSpace = reflect(-eyeDir_worldSpace, normal_worldSpace);
+    Specular += textureCube(specMap,reflectDir_wordlSpace);
 
     // Ajout des contribution lumineuses calculées
     resColor += Diffuse * matDiffuse;
